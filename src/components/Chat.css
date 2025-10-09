@@ -1,0 +1,24 @@
+.chat-console {
+  width: 100%;
+  max-width: 500px;
+  padding: 15px 15px;
+  margin: 0 auto;
+  background-color: aliceblue;
+}
+
+
+.chat-contact-div {
+  background-color: aliceblue; /* Set the background color to black */
+  border-radius: 10px; /* Make the div perfectly round */
+  padding: 20px;
+  margin-left: 5px ;
+
+}
+
+.chat-messages-div {
+  background-color: aliceblue; /* Set the background color to black */
+  border-radius: 10px; /* Make the div perfectly round */
+  padding: 20px;
+  margin-left: 5px ;
+
+}
