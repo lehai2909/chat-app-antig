@@ -1,0 +1,33 @@
+# syntax=docker/dockerfile:1
+
+# syntax=docker/dockerfile:1
+
+FROM node:23-alpine as build
+
+WORKDIR /app
+
+# Install dependencies
+COPY package.json package-lock.json ./
+
+RUN npm install
+
+# Copy source and build
+COPY . .
+
+RUN npm run build
+
+# Step 2: Serve the app using Nginx
+FROM nginx:alpine
+
+# Remove default Nginx static assets
+RUN rm -rf /usr/share/nginx/html/*
+
+# Copy built React files
+COPY --from=build /app/dist /usr/share/nginx/html
+
+# Optional: custom Nginx config (for SPA routing)
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
