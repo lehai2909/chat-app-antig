@@ -7,11 +7,11 @@ import {
   InitiateAuthCommand,
 } from "@aws-sdk/client-cognito-identity-provider";
 import "./Login.css";
-import {useState} from "react";
-import {initiateAuth, signUp} from "../utils/authService";
-import {userNotify} from "../utils/notificationService";
-import {Link, useNavigate} from "react-router";
-
+import { useState } from "react";
+import { initiateAuth, signUp } from "../utils/authService";
+import { userNotify } from "../utils/notificationService";
+import { Link, useNavigate } from "react-router";
+import axios from "axios";
 function Login() {
   let navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -21,12 +21,37 @@ function Login() {
 
   async function handleLogin(event) {
     event.preventDefault();
-    await initiateAuth({
-      username: email,
-      password: password,
-      clientId: import.meta.env.VITE_CLIENT_ID,
-    });
-    await userNotify(email);
+    // await initiateAuth({
+    //   username: email,
+    //   password: password,
+    //   clientId: import.meta.env.VITE_CLIENT_ID,
+    // });
+
+    await axios
+      .post(
+        "https://ty9n22xoea.execute-api.ap-southeast-1.amazonaws.com/dev/api/auth",
+        {
+          username: email,
+          password: password,
+          clientId: import.meta.env.VITE_CLIENT_ID,
+        }
+      )
+      .then(function (response) {
+        console.log(response.data.auth);
+        sessionStorage.setItem("idToken", response.data.auth.IdToken || "");
+        sessionStorage.setItem(
+          "accessToken",
+          response.data.auth.AccessToken || ""
+        );
+        sessionStorage.setItem(
+          "refreshToken",
+          response.data.auth.RefreshToken || ""
+        );
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    // await userNotify(email); //migrate to Lambda backend
     if (sessionStorage.getItem("accessToken")) {
       // window.location.href = "/chat";
     }
@@ -39,7 +64,7 @@ function Login() {
       password: password,
       clientId: import.meta.env.VITE_CLIENT_ID,
     });
-    navigate("/confirm", {state: {email}});
+    navigate("/confirm", { state: { email } });
   }
 
   return (

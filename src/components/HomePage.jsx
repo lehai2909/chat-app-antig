@@ -10,7 +10,7 @@ export default function HomePage() {
       <img src={naza} alt="Naza" className="logo" />
       <div>
         <Button variant="light">
-          <Link to="/login">Login</Link>
+           <Link to="/login">Login</Link>
         </Button>
       </div>
     </div>

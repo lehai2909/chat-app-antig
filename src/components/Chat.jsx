@@ -3,10 +3,11 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import MessageList from "./MessageList";
 import "./Chat.css";
-import {useState} from "react";
-import {loadMessages} from "../utils/loadMessages";
-import {putMessage} from "../utils/putMessage";
-import {jwtDecode} from "../utils/jwtDecode";
+import { useState } from "react";
+import { loadMessages } from "../utils/loadMessages";
+import { putMessage } from "../utils/putMessage";
+import { jwtDecode } from "../utils/jwtDecode";
+// import { putMessageOnTopic } from "../utils/messageSync";
 
 const user = await jwtDecode(
   import.meta.env.VITE_USERPOOL_ID,
@@ -32,6 +33,7 @@ export default function Chat() {
         to: chatTo,
       };
       putMessage(newMessage);
+      // putMessageOnTopic(JSON.stringify(newMessage));
       setMessages([...messages, newMessage]);
       setInputValue("");
     }
