@@ -2,24 +2,15 @@
 
 Welcome to **Naza Chat**, a beautiful, real-time messaging experience designed to keep you connected with friends effortlessly. 🚀
 
-This isn't just another chat app; it's a showcase of modern web technologies blending **seamless authentication**, **real-time synchronization**, and **premium glassmorphism aesthetics**.
-
 ---
 
 ## 🌟 Why You'll Love It
 
 ### 🔐 Seamless Google Sign-In
-Forget remembering passwords. Log in securely with your Google account. We automatically sync your **profile picture** and **name**, so your friends know exactly who they're talking to instantly.
+automatically sync your **profile picture** and **name**, so your friends know exactly who they're talking to instantly.
 
 ### ⚡ Instant, Real-Time Connection
 Powered by **WebSockets**, messages verify and travel at the speed of light. See who comes online the moment they join. No refreshing required—it just feels *alive*.
-
-### 🎨 Stunning Visual Experience
-We replaced boring flat designs with a **rich, glassmorphism interface**:
-*   **Translucent Sidebars**: Blur effects that adapt to your background.
-*   **Messenger-Style Layout**: Familiar "Blue vs Gray" flows for intuitive reading.
-*   **Wide-Screen Optimization**: A layout that breathes, utilizing your full desktop space perfectly.
-*   **Smooth Animations**: Messages glide in gently, making every conversation feel fluid.
 
 ---
 
