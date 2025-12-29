@@ -1,17 +1,18 @@
-import naza from "/naza.jpeg";
 import "./HomePage.css";
-import {Link} from "react-router";
-import Button from "react-bootstrap/Button";
+import { Link } from "react-router";
 
 export default function HomePage() {
   return (
     <div className="home-page">
-      <h1>Amazing Chat App</h1>
-      <img src={naza} alt="Naza" className="logo" />
-      <div>
-        <Button variant="light">
-           <Link to="/login">Login</Link>
-        </Button>
+      <div className="glass-panel hero-section">
+        <h1 className="hero-title">Amazing Chat App</h1>
+        <div className="logo-container">
+          <img src="/naza.jpeg" alt="Naza" className="logo" />
+        </div>
+        <p className="hero-subtitle">Connect with friends in a cute & colorful way!</p>
+        <div className="cta-container">
+          <Link to="/login" className="btn-primary-link">Start Chatting</Link>
+        </div>
       </div>
     </div>
   );

@@ -1,16 +1,121 @@
-# React + Vite
+# ✨ Naza Chat App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Welcome to **Naza Chat**, a beautiful, real-time messaging experience designed to keep you connected with friends effortlessly. 🚀
 
-Currently, two official plugins are available:
+This isn't just another chat app; it's a showcase of modern web technologies blending **seamless authentication**, **real-time synchronization**, and **premium glassmorphism aesthetics**.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## 🌟 Why You'll Love It
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 🔐 Seamless Google Sign-In
+Forget remembering passwords. Log in securely with your Google account. We automatically sync your **profile picture** and **name**, so your friends know exactly who they're talking to instantly.
 
-## Expanding the ESLint configuration
+### ⚡ Instant, Real-Time Connection
+Powered by **WebSockets**, messages verify and travel at the speed of light. See who comes online the moment they join. No refreshing required—it just feels *alive*.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### 🎨 Stunning Visual Experience
+We replaced boring flat designs with a **rich, glassmorphism interface**:
+*   **Translucent Sidebars**: Blur effects that adapt to your background.
+*   **Messenger-Style Layout**: Familiar "Blue vs Gray" flows for intuitive reading.
+*   **Wide-Screen Optimization**: A layout that breathes, utilizing your full desktop space perfectly.
+*   **Smooth Animations**: Messages glide in gently, making every conversation feel fluid.
+
+---
+
+## 🛠️ Under the Hood
+
+How does it all work? Here is the flow of data across our system:
+
+```mermaid
+sequenceDiagram
+    participant U as User (Browser)
+    participant G as Google Auth
+    participant A as Frontend (React)
+    participant S as WebSocket Server
+    participant F as Friend (Browser)
+
+    Note over U, A: Authentication
+    U->>A: Clicks "Sign in with Google"
+    A->>G: Request Identity
+    G-->>A: Returns ID Token
+    A->>A: Decodes Token (Name, Email, Picture)
+    A->>A: Stores User Session
+
+    Note over U, S: Real-Time Connection
+    A->>S: Connect & Send "Login" (with Avatar)
+    S-->>F: Broadcast "User Online" Update
+    F->>F: Renders New Contact with Avatar
+
+    Note over U, F: Messaging
+    U->>A: Types & Sends Message
+    A->>S: Emits Message Event
+    S->>F: Routes Message to Friend
+    F->>F: Displays Message bubbling up
+```
+
+---
+
+## � Run with Docker (Recommended)
+
+Get the whole app running in seconds.
+
+```bash
+docker-compose up --build
+```
+
+The app will be available at `http://localhost:5173`.
+
+---
+
+## �🚀 Getting Started (Manual)
+
+Want to run this locally without Docker? It's easier than you think.
+
+### Prerequisites
+*   Node.js installed on your machine.
+*   A Google Cloud Project (for the Client ID).
+
+### 1. Clone & Install
+```bash
+git clone https://github.com/your-repo/naza-chat.git
+cd naza-chat
+npm install
+```
+
+### 2. Configure Google Login
+Open `src/components/Login.jsx` and add your **Google Client ID**:
+```javascript
+const GOOGLE_CLIENT_ID = "YOUR_CLIENT_ID_HERE";
+```
+
+### 3. Start the Engines
+You need two terminals running:
+
+**Terminal 1: The WebSocket Backend**
+```bash
+cd websocket-server
+npm install
+node server.js
+```
+
+**Terminal 2: The React Frontend**
+```bash
+# In the main folder
+npm run dev
+```
+
+Visit `http://localhost:5173`, sign in, and start chatting! 💬
+
+---
+
+## 🛠 Tech Stack
+
+*   **Frontend**: React, Vite, CSS3 (Glassmorphism & Flexbox).
+*   **Auth**: OAuth 2.0 via `@react-oauth/google`.
+*   **Backend**: Node.js, `ws` (Native WebSockets).
+*   **Security**: JWT Decoding for secure session handling.
+
+---
+
+*Made with ❤️ by Le Hai*

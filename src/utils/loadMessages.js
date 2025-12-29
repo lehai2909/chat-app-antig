@@ -1,5 +1,5 @@
-import {DynamoDBClient, QueryCommand} from "@aws-sdk/client-dynamodb";
-import {fromCognitoIdentityPool} from "@aws-sdk/credential-providers";
+import { DynamoDBClient, QueryCommand } from "@aws-sdk/client-dynamodb";
+import { fromCognitoIdentityPool } from "@aws-sdk/credential-providers";
 
 export async function loadMessages(from, to) {
   const client = new DynamoDBClient({
@@ -21,7 +21,7 @@ export async function loadMessages(from, to) {
         "cognito-idp.ap-southeast-1.amazonaws.com/ap-southeast-1_FQTn7iOst":
           sessionStorage.getItem("idToken"),
       },
-      clientConfig: {region: "ap-southeast-1"},
+      clientConfig: { region: "ap-southeast-1" },
     }),
   });
   const input = {
@@ -30,12 +30,7 @@ export async function loadMessages(from, to) {
         S: [from, to].sort().join("#"),
       },
     },
-    ExpressionAttributeNames: {
-      "#from": "from",
-      "#to": "to",
-    },
     KeyConditionExpression: "conversation_id = :conversation_id",
-    ProjectionExpression: "content, #from, #to",
     TableName: "chat-messages",
   };
   const command = new QueryCommand(input);
@@ -44,6 +39,7 @@ export async function loadMessages(from, to) {
     content: item.content.S,
     from: item.from.S,
     to: item.to.S,
+    type: item.type ? item.type.S : "text",
   }));
   return messages;
 }

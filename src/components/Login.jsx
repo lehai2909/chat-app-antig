@@ -1,131 +1,78 @@
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import Container from "react-bootstrap/Container";
-import {
-  AuthFlowType,
-  CognitoIdentityProviderClient,
-  InitiateAuthCommand,
-} from "@aws-sdk/client-cognito-identity-provider";
-import "./Login.css";
 import { useState } from "react";
-import { initiateAuth, signUp } from "../utils/authService";
-import { userNotify } from "../utils/notificationService";
 import { Link, useNavigate } from "react-router";
-import axios from "axios";
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import { jwtDecode } from "jwt-decode";
+import "./Login.css";
+
+// REPLACE THIS WITH YOUR ACTUAL GOOGLE CLIENT ID
+const GOOGLE_CLIENT_ID = "610442905827-24366duk12fb1lfdpm05oj7bl2t3jhqa.apps.googleusercontent.com";
+
 function Login() {
   let navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isSignUp, setIsSignUp] = useState(false);
-  // const [error, setError] = useState("");
+  const [error, setError] = useState("");
 
-  async function handleLogin(event) {
-    event.preventDefault();
-    // await initiateAuth({
-    //   username: email,
-    //   password: password,
-    //   clientId: import.meta.env.VITE_CLIENT_ID,
-    // });
+  const handleGoogleSuccess = (credentialResponse) => {
+    try {
+      console.group("Google Login Success Debug Info");
+      console.log("Raw Credential Response:", credentialResponse);
+      console.log("ID Token (credential):", credentialResponse.credential);
+      console.log("Client ID matching:", credentialResponse.clientId);
 
-    await axios
-      .post(
-        "https://ty9n22xoea.execute-api.ap-southeast-1.amazonaws.com/dev/api/auth",
-        {
-          username: email,
-          password: password,
-          clientId: import.meta.env.VITE_CLIENT_ID,
-        }
-      )
-      .then(function (response) {
-        console.log(response.data.auth);
-        sessionStorage.setItem("idToken", response.data.auth.IdToken || "");
-        sessionStorage.setItem(
-          "accessToken",
-          response.data.auth.AccessToken || ""
-        );
-        sessionStorage.setItem(
-          "refreshToken",
-          response.data.auth.RefreshToken || ""
-        );
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-    // await userNotify(email); //migrate to Lambda backend
-    if (sessionStorage.getItem("accessToken")) {
-      // window.location.href = "/chat";
+      const decoded = jwtDecode(credentialResponse.credential);
+      console.log("Decoded ID Token Payload:", decoded);
+      console.log("User Email:", decoded.email);
+      console.log("User Name:", decoded.name);
+      console.log("User Picture:", decoded.picture);
+      console.groupEnd();
+
+      sessionStorage.setItem("user", decoded.name);
+      sessionStorage.setItem("email", decoded.email);
+      sessionStorage.setItem("avatar", decoded.picture);
+
+      // Force a hard redirect to ensure App component re-evaluates authentication state
+      console.log("Redirecting to chat...");
+      window.location.href = "/chat";
+    } catch (err) {
+      console.error("Error decoding token:", err);
+      setError("Failed to process login information.");
     }
-  }
+  };
 
-  async function handleSignUp(event) {
-    event.preventDefault();
-    await signUp({
-      username: email,
-      password: password,
-      clientId: import.meta.env.VITE_CLIENT_ID,
-    });
-    navigate("/confirm", { state: { email } });
-  }
+  const handleGoogleFailure = () => {
+    console.error("Google Login Failed");
+    setError("Google Login Failed. Please try again.");
+  };
 
   return (
-    <Container fluid className="form-signin">
-      {!sessionStorage.getItem("accessToken") ? (
-        <div>
-          <Form>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>Email address</Form.Label>
-              <Form.Control
-                type="email"
-                placeholder="Enter email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <Form.Text className="text-muted">
-                We'll never share your email with anyone else.
-              </Form.Text>
-            </Form.Group>
+    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+      <div className="login-container">
+        <div className="glass-panel login-card">
+          <h2 className="login-title">Welcome</h2>
+          <p className="login-subtitle">Sign in to start chatting</p>
 
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+          <div className="login-actions">
+            <div className="google-login-wrapper">
+              <GoogleLogin
+                onSuccess={handleGoogleSuccess}
+                onError={handleGoogleFailure}
+                theme="filled_black"
+                shape="pill"
+                size="large"
               />
-            </Form.Group>
+            </div>
 
-            <Button
-              variant="primary"
-              type="submit"
-              onClick={isSignUp ? handleSignUp : handleLogin}
-            >
-              {isSignUp ? "Sign Up" : "Log In"}
-            </Button>
-          </Form>
-          <Button variant="link" onClick={() => setIsSignUp(!isSignUp)}>
-            {isSignUp
-              ? "Already have an account? Log In"
-              : "You don't have an account? Sign Up"}
-          </Button>
+            {error && <p className="error-message">{error}</p>}
+
+            {GOOGLE_CLIENT_ID === "YOUR_GOOGLE_CLIENT_ID_HERE" && (
+              <div className="setup-notice">
+                <p>⚠️ <strong>Configuration Needed</strong></p>
+                <p>Please update <code>Login.jsx</code> with your Google Client ID.</p>
+              </div>
+            )}
+          </div>
         </div>
-      ) : (
-        <div>
-          <h3>
-            You are already logged in. Let use <Link to="/chat">Chat</Link> now
-          </h3>
-          <Button
-            variant="info"
-            onClick={() => {
-              sessionStorage.clear();
-              window.location.href = "/login";
-            }}
-          >
-            Log Out
-          </Button>
-        </div>
-      )}
-    </Container>
+      </div>
+    </GoogleOAuthProvider>
   );
 }
 

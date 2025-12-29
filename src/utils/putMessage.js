@@ -1,6 +1,6 @@
-import {DynamoDBClient, PutItemCommand} from "@aws-sdk/client-dynamodb";
-import {fromCognitoIdentityPool} from "@aws-sdk/credential-providers";
-import {v4 as uuidv4} from "uuid";
+import { DynamoDBClient, PutItemCommand } from "@aws-sdk/client-dynamodb";
+import { fromCognitoIdentityPool } from "@aws-sdk/credential-providers";
+import { v4 as uuidv4 } from "uuid";
 
 // ⇨ '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d'
 export async function putMessage(message) {
@@ -23,7 +23,7 @@ export async function putMessage(message) {
         "cognito-idp.ap-southeast-1.amazonaws.com/ap-southeast-1_FQTn7iOst":
           sessionStorage.getItem("idToken"),
       },
-      clientConfig: {region: "ap-southeast-1"},
+      clientConfig: { region: "ap-southeast-1" },
     }),
   });
 
@@ -50,6 +50,9 @@ export async function putMessage(message) {
       },
       conversation_id: {
         S: [message.from, message.to].sort().join("#"),
+      },
+      type: {
+        S: message.type || "text",
       },
     },
   };

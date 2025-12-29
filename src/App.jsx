@@ -8,8 +8,8 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router";
 
 function App() {
   const isAuthenticated = () => {
-    const accessToken = sessionStorage.getItem("accessToken");
-    return !!accessToken;
+    const user = sessionStorage.getItem("user");
+    return !!user;
   };
   return (
     <BrowserRouter>

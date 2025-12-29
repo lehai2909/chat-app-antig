@@ -10,6 +10,7 @@ import "./Login.css";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import axios from "axios";
+import { logService } from "../utils/logService";
 
 function Search() {
   const [keyword, setKeyword] = useState("");
@@ -22,13 +23,13 @@ function Search() {
     //   clientId: import.meta.env.VITE_CLIENT_ID,
     // });
     console.log("Searching for: " + keyword);
-
-    await axios
-      .post()
-      .then(function (response) {})
-      .catch(function (error) {
-        console.log(error);
-      });
+    logService();
+    // await axios
+    //   .post()
+    //   .then(function (response) {})
+    //   .catch(function (error) {
+    //     console.log(error);
+    //   });
     // await userNotify(email);
     if (sessionStorage.getItem("accessToken")) {
       // window.location.href = "/chat";
