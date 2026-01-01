@@ -1,5 +1,6 @@
 import MessageList from "./MessageList";
 import "./Chat.css";
+import UserProfileMenu from "./UserProfileMenu";
 import { useState, useEffect, useRef } from "react";
 
 export default function Chat() {
@@ -11,6 +12,7 @@ export default function Chat() {
   }
 
   const [messages, setMessages] = useState([]);
+  const [unreadUsers, setUnreadUsers] = useState(new Set());
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [chatTo, setChatTo] = useState("");
   const [inputValue, setInputValue] = useState("");
@@ -35,6 +37,15 @@ export default function Chat() {
         // Only show message if it belongs to the current conversation
         // (Simplified for now: In a real app we'd store all and filter view)
         setMessages((prev) => [...prev, data]);
+
+        // If message is from someone we are NOT currently chatting with, mark them as unread
+        if (data.from !== chatTo) {
+          setUnreadUsers((prev) => {
+            const newSet = new Set(prev);
+            newSet.add(data.from);
+            return newSet;
+          });
+        }
       }
     };
 
@@ -85,7 +96,6 @@ export default function Chat() {
         <div className="chat-sidebar">
           <div className="sidebar-header">
             <h3>Chats</h3>
-            {avatar && <img src={avatar} alt="Me" className="avatar-small" style={{ marginLeft: 'auto' }} />}
           </div>
           <div className="contact-search">
             <input
@@ -103,8 +113,15 @@ export default function Chat() {
               onlineUsers.map(u => (
                 <div
                   key={u.username}
-                  className={`contact-item ${chatTo === u.username ? 'active' : ''}`}
-                  onClick={() => setChatTo(u.username)}
+                  className={`contact-item ${chatTo === u.username ? 'active' : ''} ${unreadUsers.has(u.username) ? 'unread' : ''}`}
+                  onClick={() => {
+                    setChatTo(u.username);
+                    setUnreadUsers((prev) => {
+                      const newSet = new Set(prev);
+                      newSet.delete(u.username);
+                      return newSet;
+                    });
+                  }}
                 >
                   {u.avatar ? (
                     <img src={u.avatar} alt={u.username} className="avatar" />
@@ -136,6 +153,7 @@ export default function Chat() {
             ) : (
               <h3>Select a user to start chatting</h3>
             )}
+            <UserProfileMenu />
           </div>
 
           <div className="chat-messages-area">

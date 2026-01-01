@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import "./Login.css";
 
 // REPLACE THIS WITH YOUR ACTUAL GOOGLE CLIENT ID
-const GOOGLE_CLIENT_ID = "610442905827-24366duk12fb1lfdpm05oj7bl2t3jhqa.apps.googleusercontent.com";
+const GOOGLE_CLIENT_ID = "YOUR_CLIENT_ID_HERE";
 
 function Login() {
   let navigate = useNavigate();
@@ -25,9 +25,13 @@ function Login() {
       console.log("User Picture:", decoded.picture);
       console.groupEnd();
 
+      console.groupEnd();
+
       sessionStorage.setItem("user", decoded.name);
       sessionStorage.setItem("email", decoded.email);
       sessionStorage.setItem("avatar", decoded.picture);
+      // Store full profile for User Info page
+      sessionStorage.setItem("userProfile", JSON.stringify(decoded));
 
       // Force a hard redirect to ensure App component re-evaluates authentication state
       console.log("Redirecting to chat...");
@@ -65,8 +69,13 @@ function Login() {
 
             {GOOGLE_CLIENT_ID === "YOUR_GOOGLE_CLIENT_ID_HERE" && (
               <div className="setup-notice">
-                <p>⚠️ <strong>Configuration Needed</strong></p>
-                <p>Please update <code>Login.jsx</code> with your Google Client ID.</p>
+                <p>
+                  ⚠️ <strong>Configuration Needed</strong>
+                </p>
+                <p>
+                  Please update <code>Login.jsx</code> with your Google Client
+                  ID.
+                </p>
               </div>
             )}
           </div>

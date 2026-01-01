@@ -2,8 +2,8 @@ import { useState } from "react";
 import HomePage from "./components/HomePage";
 import Login from "./components/Login";
 import Chat from "./components/Chat";
-import Confirm from "./components/Confirm";
 import Search from "./components/Search";
+import UserInfo from "./components/UserInfo";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router";
 
 function App() {
@@ -15,7 +15,6 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Login />} />
-        <Route path="/confirm" element={<Confirm />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/search" element={<Search />} />
         <Route path="/" element={<Navigate to="/home" replace />} />
@@ -23,6 +22,12 @@ function App() {
           path="/chat"
           element={
             isAuthenticated() ? <Chat /> : <Navigate to="/login" replace />
+          }
+        />
+        <Route
+          path="/about"
+          element={
+            isAuthenticated() ? <UserInfo /> : <Navigate to="/login" replace />
           }
         />
       </Routes>

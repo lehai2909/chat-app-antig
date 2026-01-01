@@ -1,0 +1,107 @@
+.user-profile-menu {
+    position: relative;
+    margin-left: auto;
+    z-index: 1000;
+}
+
+.profile-trigger {
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.profile-trigger:hover {
+    transform: scale(1.05);
+}
+
+.profile-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profile-avatar-placeholder {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: var(--primary-gradient);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+    border: 2px solid white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profile-dropdown-menu {
+    position: absolute;
+    top: 60px;
+    right: 0;
+    width: 200px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+    padding: 8px 0;
+    animation: slideDown 0.2s ease-out;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.menu-header {
+    padding: 10px 20px;
+}
+
+.menu-username {
+    font-weight: 700;
+    color: var(--color-text);
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.menu-divider {
+    height: 1px;
+    background: rgba(0, 0, 0, 0.05);
+    margin: 5px 0;
+}
+
+.menu-item {
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    padding: 10px 20px;
+    font-size: 0.95rem;
+    color: var(--color-text);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.menu-item:hover {
+    background: rgba(0, 0, 0, 0.03);
+}
+
+.menu-item.logout {
+    color: #ff4757;
+}
+
+.menu-item.logout:hover {
+    background: rgba(255, 71, 87, 0.05);
+}

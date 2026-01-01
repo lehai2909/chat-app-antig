@@ -1,11 +1,6 @@
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/Container";
-import {
-  AuthFlowType,
-  CognitoIdentityProviderClient,
-  InitiateAuthCommand,
-} from "@aws-sdk/client-cognito-identity-provider";
 import "./Login.css";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
