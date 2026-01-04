@@ -25,3 +25,7 @@ dist-ssr
 
 .env
 .env.production
+
+# Test files with secrets
+test/axios.js
+test/k6.js
