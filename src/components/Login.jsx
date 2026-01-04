@@ -5,27 +5,27 @@ import { jwtDecode } from "jwt-decode";
 import "./Login.css";
 
 // REPLACE THIS WITH YOUR ACTUAL GOOGLE CLIENT ID
-const GOOGLE_CLIENT_ID = "YOUR_CLIENT_ID_HERE";
-
+// const GOOGLE_CLIENT_ID = "YOUR_CLIENT_ID_HERE";
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 function Login() {
   let navigate = useNavigate();
   const [error, setError] = useState("");
 
   const handleGoogleSuccess = (credentialResponse) => {
     try {
-      console.group("Google Login Success Debug Info");
-      console.log("Raw Credential Response:", credentialResponse);
-      console.log("ID Token (credential):", credentialResponse.credential);
-      console.log("Client ID matching:", credentialResponse.clientId);
+      // console.group("Google Login Success Debug Info");
+      // console.log("Raw Credential Response:", credentialResponse);
+      // console.log("ID Token (credential):", credentialResponse.credential);
+      // console.log("Client ID matching:", credentialResponse.clientId);
 
       const decoded = jwtDecode(credentialResponse.credential);
-      console.log("Decoded ID Token Payload:", decoded);
-      console.log("User Email:", decoded.email);
-      console.log("User Name:", decoded.name);
-      console.log("User Picture:", decoded.picture);
-      console.groupEnd();
+      // console.log("Decoded ID Token Payload:", decoded);
+      // console.log("User Email:", decoded.email);
+      // console.log("User Name:", decoded.name);
+      // console.log("User Picture:", decoded.picture);
+      // console.groupEnd();
 
-      console.groupEnd();
+      // console.groupEnd();
 
       sessionStorage.setItem("user", decoded.name);
       sessionStorage.setItem("email", decoded.email);

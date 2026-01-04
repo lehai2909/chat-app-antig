@@ -1,6 +1,8 @@
 const WebSocket = require('ws');
 
-const wss = new WebSocket.Server({ port: 8080 });
+const port = process.env.PORT || 8080;
+const wss = new WebSocket.Server({ port: port });
+
 
 // Store connected clients: { username: ws }
 const clients = {};
@@ -83,4 +85,4 @@ function broadcastUserList() {
     });
 }
 
-console.log('WebSocket server started on ws://localhost:8080');
+console.log(`WebSocket server started on ws://localhost:${port}`);

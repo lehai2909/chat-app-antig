@@ -1,0 +1,19 @@
+.footer {
+  text-align: center;
+  padding: 15px;
+  background: var(--color-surface-glass);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-top: var(--border-glass);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-text-light);
+  font-size: 0.9rem;
+}

@@ -20,7 +20,8 @@ export default function Chat() {
 
   useEffect(() => {
     // Connect to WebSocket Server
-    ws.current = new WebSocket("ws://localhost:8080");
+    const wsUrl = import.meta.env.VITE_WEBSOCKET_URL || "ws://localhost:8080";
+    ws.current = new WebSocket(wsUrl);
 
     ws.current.onopen = () => {
       console.log("Connected to WebSocket");
@@ -57,6 +58,13 @@ export default function Chat() {
       if (ws.current) ws.current.close();
     };
   }, [user]);
+
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Filter users based on search query
+  const filteredUsers = onlineUsers.filter(u =>
+    u.username.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const handleSendMessage = () => {
     if (inputValue.trim() && chatTo) {
@@ -103,14 +111,18 @@ export default function Chat() {
               placeholder="Find user..."
               className="search-input"
               style={{ width: '100%', borderRadius: '20px', border: 'none', padding: '10px' }}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
           <div className="contact-list">
             <h4>Online Users</h4>
-            {onlineUsers.length === 0 ? (
-              <div style={{ padding: '20px', textAlign: 'center', opacity: 0.6 }}>No one else is online</div>
+            {filteredUsers.length === 0 ? (
+              <div style={{ padding: '20px', textAlign: 'center', opacity: 0.6 }}>
+                {searchQuery ? "No matching users found" : "No one else is online"}
+              </div>
             ) : (
-              onlineUsers.map(u => (
+              filteredUsers.map(u => (
                 <div
                   key={u.username}
                   className={`contact-item ${chatTo === u.username ? 'active' : ''} ${unreadUsers.has(u.username) ? 'unread' : ''}`}
